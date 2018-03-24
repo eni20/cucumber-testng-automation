@@ -3,6 +3,7 @@ package com.app.step_definitions;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 
 import com.app.pages.SuiteCRMDashboardPage;
@@ -39,16 +40,24 @@ public class SearchContactStepDefs {
 	@When("^duplicated contact \"([^\"]*)\" exists$")
 	public void duplicated_contact_exists(String searchTerm) {
 		dashboardPage.addContact();
-		// try {
-		// assertTrue(searchResultPage.searchResultLinks(searchTerm).size()>1);
-		// } catch (AssertionError e) {
-		// System.out.println("There is only one "+ searchTerm);
-		// }
+		 try {
+		 assertTrue(searchResultPage.searchResultLinks(searchTerm).size()>1);
+		 } catch (AssertionError e) {
+		 System.out.println("There is only one "+ searchTerm);
+		 }
 	}
 
 	@When("^remove duplicates for this contact$")
 	public void remove_duplicates_for_this_contact() {
-		searchResultPage.JohnDoe.click();
+		searchResultPage.actions.click();
+		searchResultPage.findDuplicates.click();
+		searchResultPage.next_step_button.click();
+		searchResultPage.selectBox.click();
+		searchResultPage.perform_merge_button.click();
+		searchResultPage.save_merged_record_button.click();
+		Alert alert= driver.switchTo().alert();
+		alert.accept();
+		
 	}
 
 	@Then("^there should be only (\\d+) John Doe in the contacts page$")

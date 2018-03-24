@@ -10,12 +10,29 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class BrowserUtils {
+
+	public static List<String> getElementsText(List<WebElement> list) {
+		List<String> elemTxts = new ArrayList<>();
+		for (WebElement el : list) {
+			// ignores any elemts with no text
+			if (!el.getText().isEmpty()) {
+				elemTxts.add(el.getText());
+			}
+		}
+		return elemTxts;
+	}
+
+	public static void hoverOver(WebElement element) {
+		Actions action = new Actions(Driver.getDriver());
+		action.moveToElement(element).perform();
+	}
 
 	public static WebElement waitForVisibility(WebElement element, int timeToWaitInSec) {
 		WebDriverWait wait = new WebDriverWait(Driver.getDriver(), timeToWaitInSec);
@@ -38,8 +55,9 @@ public class BrowserUtils {
 	}
 
 	public static WebElement fluentWait(final WebElement webElement, int timeinsec) {
-		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(Driver.getDriver()).withTimeout(timeinsec, TimeUnit.SECONDS)
-				.pollingEvery(timeinsec, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
+		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(Driver.getDriver())
+				.withTimeout(timeinsec, TimeUnit.SECONDS).pollingEvery(timeinsec, TimeUnit.SECONDS)
+				.ignoring(NoSuchElementException.class);
 		WebElement element = wait.until(new Function<WebDriver, WebElement>() {
 			public WebElement apply(WebDriver driver) {
 				return webElement;

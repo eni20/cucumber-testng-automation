@@ -1,5 +1,8 @@
 package com.app.pages;
 
+import java.util.List;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -57,7 +60,7 @@ public class SuiteCRMDashboardPage {
 	public WebElement contacts;
 
 	@FindBy(xpath = "//div[.='Create Contact From vCard']")
-	public WebElement createContact;
+	public WebElement createContactVcard;
 
 	@FindBy(id = "vcard_file")
 	public WebElement chooseFile;
@@ -70,11 +73,13 @@ public class SuiteCRMDashboardPage {
 
 	@FindBy(linkText = "Create Task")
 	public WebElement createTask;
+	
+	@FindBy(linkText="Create Contact")
+	public WebElement createContact;
 
 	public void logout() {
 		Actions action = new Actions(driver);
-		action.moveToElement(profileMenu);
-		action.perform();
+		action.moveToElement(profileMenu).perform();
 		BrowserUtils.waitForVisibility(logoutlink, 5);
 		logoutlink.click();
 	}
@@ -88,7 +93,7 @@ public class SuiteCRMDashboardPage {
 		Actions action = new Actions(driver);
 		action.moveToElement(all).perform();
 		contacts.click();
-		createContact.click();
+		createContactVcard.click();
 		chooseFile.sendKeys("C:\\Users\\M.METOFF\\Desktop\\Selenium\\john-doe.vcf");
 		importVcardButton.click();
 	}
@@ -98,7 +103,11 @@ public class SuiteCRMDashboardPage {
 		action.moveToElement(createLink).perform();
 		BrowserUtils.waitForVisibility(createTask, 5);
 		createTask.click();
+	}
 
+	public List<WebElement> topMenuOptions(String name) {
+		String xpath = "//a[.='" + name + "']/..//li/a";
+		return driver.findElements(By.xpath(xpath));
 	}
 
 }
